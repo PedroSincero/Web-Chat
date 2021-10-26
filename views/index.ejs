@@ -16,12 +16,16 @@
     </style>
   </head>
   <body>
+    <h1>OI BOBO</h1>
     <ul id="messages"></ul>
     <form id="form" action="">
-      <input id="input" autocomplete="off" /><button>Send</button>
+      <input id="input" autocomplete="off" data-testid="message-box"/>
+      <button data-testid="send-button">
+        Send
+      </button>
     </form>
   </body>
-  <!-- <script src="/socket.io/socket.io.js"></script> -->
+  <script src="/socket.io/socket.io.js"></script>
   <!-- <script>
   var socket = io();
 

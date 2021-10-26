@@ -4,11 +4,14 @@ const express = require('express');
 const app = express();
 const http = require('http').createServer(app);
 
-const PORT = process.env.PORT || 300;
+app.set('view engine', 'ejs');
+app.set('views', './views');
+
+// const PORT = process.env.PORT || 3000;
 // const { Server } = require('socket.io');
 const io = require('socket.io')(http, {
   cors: {
-    origin: `https://localhost:${PORT}`,
+    origin: 'https://localhost:3000',
     method: ['GET', 'POST'],
   },
 });
@@ -16,7 +19,7 @@ const io = require('socket.io')(http, {
 app.use(express.json());
 // const io = Server(server);
 app.get('/', (req, res) => {
-  res.sendFile(`${__dirname}/index.html`);
+  res.render(`${__dirname}/views/index.ejs`);
 });
 
 io.on('connection', (socket) => {
@@ -27,7 +30,7 @@ io.on('connection', (socket) => {
   });
 });
 
-http.listen(PORT, () => {
+http.listen(3000, () => {
   console.log('listening on *:3000');
 });
 
