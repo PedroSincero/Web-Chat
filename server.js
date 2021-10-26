@@ -1,12 +1,14 @@
+require('dotenv').config();
 const express = require('express');
 
 const app = express();
 const http = require('http').createServer(app);
 
+const PORT = process.env.PORT || 300;
 // const { Server } = require('socket.io');
 const io = require('socket.io')(http, {
   cors: {
-    origin: 'https://localhost:3000',
+    origin: `https://localhost:${PORT}`,
     method: ['GET', 'POST'],
   },
 });
