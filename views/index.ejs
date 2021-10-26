@@ -16,38 +16,63 @@
     </style>
   </head>
   <body>
-    <h1>OI BOBO</h1>
+
+    <form action="">
+      <input data-testid="nickname-box" id="input-nick"/>
+      <button data-testid="nickname-button" id="button-nick">Send New Nick</button>
+    </form>
+
+    <p id="user" data-testid="online-user"></p>
     <ul id="messages"></ul>
+
     <form id="form" action="">
       <input id="input" autocomplete="off" data-testid="message-box"/>
       <button data-testid="send-button">
         Send
       </button>
     </form>
+
   </body>
   <script src="/socket.io/socket.io.js"></script>
-  <!-- <script>
-  var socket = io();
 
-var messages = document.getElementById('messages');
-var form = document.getElementById('form');
-var input = document.getElementById('input');
+ <script>
+  const socket = io();
 
+  const messages = document.getElementById('messages');
+  const form = document.getElementById('form');
+  const input = document.getElementById('input');
+
+  const btnNewNick = document.getElementById('button-nick');
+  const inputNick = document.getElementById('input-nick');
+  const onUsers = document.getElementById('user');
 // Enviando
-form.addEventListener('submit', function(e) {
+let nickname = Math.random().toString(16).substr(2,8)+Math.random().toString(16).substr(2,8);
+onUsers.innerText = nickname;
+
+btnNewNick.addEventListener('click', (e) => {
   e.preventDefault();
-  if (input.value) {
-    socket.emit('message', input.value);
+  nickname = inputNick.value;
+  onUsers.innerText = nickname 
+  inputNick.value = '';
+})
+
+form.addEventListener('submit', (e) => {
+  console.log(input.value);
+  const chatMessage = input.value
+  e.preventDefault();
+    socket.emit('message', {nickname, chatMessage });
     input.value = '';
-  }
 });
 
 // Recebendo
-socket.on('chat message', function(msg) {
-  var item = document.createElement('li');
-  item.textContent = msg;
+socket.on('message', (msg) => {
+  // console.log(msg);
+  // item.textContent = msg;
+  const item = document.createElement('li');
+  item.setAttribute('data-testid', 'message')
+  item.innerText = msg
   messages.appendChild(item);
   window.scrollTo(0, document.body.scrollHeight);
 });
-  </script> -->
+  </script>
 </html>

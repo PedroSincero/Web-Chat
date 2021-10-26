@@ -18,6 +18,8 @@ const io = require('socket.io')(http, {
 
 app.use(express.json());
 // const io = Server(server);
+app.use(express.static(`${__dirname}/src`));
+
 app.get('/', (req, res) => {
   res.render(`${__dirname}/views/index.ejs`);
 });
