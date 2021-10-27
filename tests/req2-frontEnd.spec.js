@@ -34,7 +34,6 @@ describe('2 - Crie um frontend para que as pessoas interajam com o chat', () => 
     await page.waitForSelector(dataTestid('online-user'));
 
     const givenNickname = await page.$$eval(dataTestid('online-user'), (nodes) => nodes.map((n) => n.innerText));
-
     expect(givenNickname[0]).toMatch(/^[\w'-]{16}$/);
   });
 

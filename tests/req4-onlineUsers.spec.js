@@ -34,7 +34,7 @@ describe('4 - Informe a todos os clientes quem está online no momento', () => {
     done();
   });
 
-  it('Será validado que quando um cliente se conecta, seu nome aparece no front-end de todos', async () => {
+  it.only('Será validado que quando um cliente se conecta, seu nome aparece no front-end de todos', async () => {
     // a client connects
     await page.goto(BASE_URL);
     await page.waitForSelector(dataTestid('online-user'));

@@ -1,23 +1,14 @@
 <!DOCTYPE html>
 <html>
+
   <head>
     <title>Socket.IO chat</title>
-    <style>
-      body { margin: 0; padding-bottom: 3rem; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-
-      #form { background: rgba(0, 0, 0, 0.15); padding: 0.25rem; position: fixed; bottom: 0; left: 0; right: 0; display: flex; height: 3rem; box-sizing: border-box; backdrop-filter: blur(10px); }
-      #input { border: none; padding: 0 1rem; flex-grow: 1; border-radius: 2rem; margin: 0.25rem; }
-      #input:focus { outline: none; }
-      #form > button { background: #333; border: none; padding: 0 1rem; margin: 0.25rem; border-radius: 3px; outline: none; color: #fff; }
-
-      #messages { list-style-type: none; margin: 0; padding: 0; }
-      #messages > li { padding: 0.5rem 1rem; }
-      #messages > li:nth-child(odd) { background: #efefef; }
-    </style>
+    <link rel="stylesheet" type="text/css" href="./css/index.css">
   </head>
+
   <body>
 
-    <form action="">
+    <form id="new-user" action="">
       <input data-testid="nickname-box" id="input-nick"/>
       <button data-testid="nickname-button" id="button-nick">Send New Nick</button>
     </form>
@@ -34,45 +25,6 @@
 
   </body>
   <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/message.js"></script>
 
- <script>
-  const socket = io();
-
-  const messages = document.getElementById('messages');
-  const form = document.getElementById('form');
-  const input = document.getElementById('input');
-
-  const btnNewNick = document.getElementById('button-nick');
-  const inputNick = document.getElementById('input-nick');
-  const onUsers = document.getElementById('user');
-// Enviando
-let nickname = Math.random().toString(16).substr(2,8)+Math.random().toString(16).substr(2,8);
-onUsers.innerText = nickname;
-
-btnNewNick.addEventListener('click', (e) => {
-  e.preventDefault();
-  nickname = inputNick.value;
-  onUsers.innerText = nickname 
-  inputNick.value = '';
-})
-
-form.addEventListener('submit', (e) => {
-  console.log(input.value);
-  const chatMessage = input.value
-  e.preventDefault();
-    socket.emit('message', {nickname, chatMessage });
-    input.value = '';
-});
-
-// Recebendo
-socket.on('message', (msg) => {
-  // console.log(msg);
-  // item.textContent = msg;
-  const item = document.createElement('li');
-  item.setAttribute('data-testid', 'message')
-  item.innerText = msg
-  messages.appendChild(item);
-  window.scrollTo(0, document.body.scrollHeight);
-});
-  </script>
 </html>
