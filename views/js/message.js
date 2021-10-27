@@ -26,7 +26,7 @@ const onlineUsers = (user) => {
   return false;
 };
 
-  const formUser = document.getElementById('new-user');
+const formUser = document.getElementById('new-user');
 
   formUser.addEventListener('submit', (e) => {
     const input = document.getElementById('input-nick');
