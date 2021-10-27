@@ -13,30 +13,21 @@ const io = require('socket.io')(http, {
     method: ['GET', 'POST'],
   },
 });
+const messageController = require('./controllers/messageController');
 
 app.use(express.json());
 
 app.use(express.static(`${__dirname}/views`));
-
 app.get('/', (req, res) => {
   res.render(`${__dirname}/views/index.ejs`);
 });
 
-io.on('connection', (socket) => {
-  socket.on('message', (msg) => {
-    const { chatMessage, nickname } = msg;
-    const today = new Date().toLocaleString().replace(/\//g, '-');
-    io.emit('message', `${today} - ${nickname} - ${chatMessage}`);
-  });
-
-  const newNickname = socket.id.split('').slice(0, 16).join('');
-  socket.emit('user', { message: newNickname });
-
-  socket.on('user', ({ message }) => {
-    io.emit('user', { message });
-  });
-  socket.broadcast.emit('newConnection', { message: `Usuário se conectou ${socket.id}` });
+app.get('/messages', async (_req, res) => {
+  const result = await messageController.findAll();
+  res.status(200).json(result);
 });
+
+require('./sockets/message.js')(io);
 
 http.listen(3000, () => {
   console.log('listening on *:3000');

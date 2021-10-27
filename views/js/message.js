@@ -6,7 +6,6 @@ form.addEventListener('submit', (e) => {
 const input = document.getElementById('input');
 const chatMessage = input.value;
 const nickname = document.getElementById('user').innerText;
-// console.log(nickname);
 e.preventDefault();
   socket.emit('message', { nickname, chatMessage });
   input.value = '';
@@ -31,15 +30,20 @@ const formUser = document.getElementById('new-user');
   formUser.addEventListener('submit', (e) => {
     const input = document.getElementById('input-nick');
     const message = input.value;
-    console.log('Usuario novo : ', message);
     e.preventDefault();
     socket.emit('user', { message });
     input.value = '';
   });
 
 window.onload = () => {
+  fetch('http://localhost:3000/messages')
+  .then((res) => res.json())
+  .then((data) => {
+    data.forEach((message) => createMessage(message));
+  });
   socket.on('user', ({ message }) => onlineUsers(message));
 };
 
 socket.on('message', (message) => createMessage(message));
-// socket.on('newConnection', ({ message }) => createMessage(message));
+
+// Agradecimentos a Daniel Roberto - Turma 10 - Tribo B - Pela explicação da funcionalidade do fetch
