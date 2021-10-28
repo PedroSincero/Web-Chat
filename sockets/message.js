@@ -1,5 +1,18 @@
 const messageController = require('../controllers/messageController');
 
+let nickNameDB = [];
+
+const updateNick = (nickname, id, io) => {
+  nickNameDB = nickNameDB.map((e) => (e.id === id ? { nickname, id } : e));
+  io.emit('user', nickNameDB);
+};
+
+const newUser = (id, io) => {
+  const nickname = id.split('').slice(0, 16).join('');
+  nickNameDB.push({ nickname, id });
+  io.emit('NewUser', nickNameDB);
+};
+
 module.exports = (io) => io.on('connection', (socket) => {
   socket.on('message', async (msg) => {
     const { chatMessage, nickname } = msg;
@@ -8,11 +21,16 @@ module.exports = (io) => io.on('connection', (socket) => {
     io.emit('message', `${today} - ${nickname} - ${chatMessage}`);
   });
 
-  const newNickname = socket.id.split('').slice(0, 16).join('');
-  socket.emit('user', { message: newNickname });
-
-  socket.on('user', ({ message }) => {
-    io.emit('user', { message });
+  socket.on('NewUser', () => {
+    newUser(socket.id, io);
   });
-  socket.broadcast.emit('newConnection', { message: `Usuário se conectou ${socket.id}` });
+
+  socket.on('user', ({ nickname }) => {
+    updateNick(nickname, socket.id, io);
+  });
+
+  socket.on('disconnect', () => {
+    nickNameDB = nickNameDB.filter(({ id }) => id !== socket.id);
+    io.emit('NewUser', nickNameDB);
+  });
 });
